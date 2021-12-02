@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
-import { getAuth, createUserWithEmailAndPassword } from '@firebase/auth';
+import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from '@angular/fire/auth';
+import { Router } from '@angular/router';
+import { sendEmailVerification } from '@firebase/auth';
+import { loginMode } from '../shared/models';
+import { ROTTE } from '../shared/rotte';
 
 @Component({
   selector: 'app-home',
@@ -11,22 +14,36 @@ export class HomePage {
 
   email: string;
   psw : string;
-  // auth;
+  pswTwo: string;
+  loginMode : loginMode = "login"
 
   constructor(
-    private auth : Auth
+    private auth : Auth,
+    private route: Router
   ) {
-    // this.auth = getAuth()
   }
 
-  async login(){
+  switchLoginMode(){
+    this.loginMode = this.loginMode == "login" ? "register" : "login";
+  }
 
+  login(){
     // let res = await this.auth.signInWithEmailAndPassword(this.email, this.psw);
     signInWithEmailAndPassword(this.auth, this.email, this.psw)
     .then(res => {
       console.log(res);
       console.log(res.user?.uid);
 
+      this.route.navigate([ROTTE.listScreen])
+    })
+    .catch(error => console.log(error))
+  }
+
+  register(){
+    createUserWithEmailAndPassword(this.auth, this.email, this.psw)
+    .then(res => {
+      console.log(res);
+      sendEmailVerification(res.user);
     })
     .catch(error => console.log(error))
   }

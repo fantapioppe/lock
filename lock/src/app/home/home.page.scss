@@ -1,6 +1,18 @@
 ion-label{
   width: 35%;
 }
-.input{
-  width: 75%;
+.buttonContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.stringContainer{
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  margin: 5%;
 }

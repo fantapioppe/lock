@@ -1,22 +1,30 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title class="ion-text-center">LOCK</ion-title>
-    <div style="width: 100%; display: flex; justify-content: center;" >
-      <ion-icon name="lock-closed"></ion-icon>
-    </div>
-  </ion-toolbar>
-</ion-header>
+<app-header></app-header>
 <ion-content>
+
   <ion-item>
     <ion-label >User</ion-label>
-    <ion-input [(ngModel)]="email"></ion-input>
+    <ion-input [(ngModel)]="email" placeholder="user@mail.com"></ion-input>
   </ion-item>
   <ion-item>
     <ion-label>Password</ion-label>
-    <ion-input [(ngModel)]="psw"></ion-input>
+    <ion-input [(ngModel)]="psw" placeholder="Password123"></ion-input>
   </ion-item>
-  <ion-item>
+  <ion-item [hidden]="loginMode == 'login' ">
+    <ion-label>Password</ion-label>
+    <ion-input [(ngModel)]="pswTwo" placeholder="Conferma password"></ion-input>
+  </ion-item>
+
+  <div class="stringContainer" [hidden]="loginMode == 'register' ">
+    <div>Non sei registrato?</div>
+    <ion-button class="ion-no-margin" fill="clear" (click)="switchLoginMode()">Click qui per registrarti</ion-button>
+  </div>
+
+  <div class="buttonContainer" *ngIf="loginMode == 'login'">
     <ion-button (click)="login()">Login</ion-button>
-  </ion-item>
+  </div>
+
+  <div class="buttonContainer" *ngIf="loginMode == 'register'">
+    <ion-button (click)="register()">Registrati</ion-button>
+  </div>
  </ion-content>
 
