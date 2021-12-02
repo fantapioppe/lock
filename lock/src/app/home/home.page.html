@@ -1,20 +1,22 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">LOCK</ion-title>
+    <div style="width: 100%; display: flex; justify-content: center;" >
+      <ion-icon name="lock-closed"></ion-icon>
+    </div>
   </ion-toolbar>
 </ion-header>
+<ion-content>
+  <ion-item>
+    <ion-label >User</ion-label>
+    <ion-input [(ngModel)]="email"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Password</ion-label>
+    <ion-input [(ngModel)]="psw"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-button (click)="login()">Login</ion-button>
+  </ion-item>
+ </ion-content>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
-</ion-content>

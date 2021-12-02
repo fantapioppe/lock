@@ -11,6 +11,10 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
+  {
+    path: 'list-screen',
+    loadChildren: () => import('./list-screen/list-screen.module').then( m => m.ListScreenPageModule)
+  },
 ];
 
 @NgModule({
