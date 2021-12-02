@@ -1,0 +1,1 @@
+firebase usato con libreria: ng add @angular/fire
