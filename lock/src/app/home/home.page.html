@@ -3,15 +3,15 @@
 
   <ion-item>
     <ion-label >User</ion-label>
-    <ion-input [(ngModel)]="email" placeholder="user@mail.com"></ion-input>
+    <ion-input #mail [(ngModel)]="email" placeholder="user@mail.com"></ion-input>
   </ion-item>
   <ion-item>
     <ion-label>Password</ion-label>
-    <ion-input type="password" [(ngModel)]="psw" placeholder="Password123"></ion-input>
+    <ion-input #psw1 type="password" [(ngModel)]="psw" placeholder="Password123"></ion-input>
   </ion-item>
   <ion-item [hidden]="loginMode == 'login' ">
     <ion-label>Password</ion-label>
-    <ion-input type="password" [(ngModel)]="pswTwo" placeholder="Conferma password"></ion-input>
+    <ion-input #psw2 type="password" [(ngModel)]="pswTwo" placeholder="Conferma password"></ion-input>
   </ion-item>
 
   <div class="stringContainer" [hidden]="loginMode == 'register' ">
@@ -25,11 +25,11 @@
   </div>
 
   <div class="buttonContainer" *ngIf="loginMode == 'login'">
-    <ion-button (click)="login()">Login</ion-button>
+    <ion-button (click)="controlButtonClick()">Login</ion-button>
   </div>
 
   <div class="buttonContainer" *ngIf="loginMode == 'register'">
-    <ion-button (click)="register()">Registrati</ion-button>
+    <ion-button (click)="controlButtonClick()">Registrati</ion-button>
   </div>
  </ion-content>
 

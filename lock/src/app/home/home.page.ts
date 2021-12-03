@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { sendEmailVerification } from '@firebase/auth';
 import { FirebaseError } from '@firebase/util';
+import { IonInput } from '@ionic/angular';
 import { MessaggieroService } from '../service/messaggiero.service';
 import { LoginMode, TipiDiFirebaseError } from '../shared/models';
 import { ROTTE } from '../shared/rotte';
@@ -19,6 +20,10 @@ export class HomePage {
   pswTwo: string;
   loginMode : LoginMode = "login"
 
+  @ViewChild("mail",{static: false}) inputEmail: IonInput
+  @ViewChild("psw1",{static: false}) inputPsw1: IonInput
+  @ViewChild("psw2",{static: false}) inputPsw2: IonInput
+
   constructor(
     private auth : Auth,
     private route: Router,
@@ -30,6 +35,36 @@ export class HomePage {
     this.loginMode = this.loginMode == "login" ? "register" : "login";
   }
 
+  controlButtonClick()
+  {
+    console.log(!this.email, this.email ,!this.psw);
+
+    if(!this.email)
+    {
+      this.focusInput(this.inputEmail)
+      return;
+    }
+    else if(!this.psw)
+    {
+      this.focusInput(this.inputPsw1)
+      return;
+    }
+
+    if(this.loginMode == "login")
+    {
+      this.login();
+    }
+    else
+    {
+      if(!this.pswTwo)
+      {
+        this.focusInput(this.inputPsw2)
+        return;
+      }
+      this.register();
+    }
+  }
+
   login(){
     // let res = await this.auth.signInWithEmailAndPassword(this.email, this.psw);
     signInWithEmailAndPassword(this.auth, this.email, this.psw)
@@ -39,7 +74,9 @@ export class HomePage {
 
       this.route.navigate([ROTTE.listScreen])
     })
-    .catch(error => console.log(error))
+    .catch((error: FirebaseError) => {
+      this.handleFirebaseErrors(<any>error.code);
+    })
   }
 
   register(){
@@ -54,23 +91,40 @@ export class HomePage {
       .catch(error => this.messaggiero.presentToast("Errore, riprova più tardi", "danger"));
     })
     .catch((error: FirebaseError) => {
-      this.messaggiero.presentToast("Errore, riprova più tardi", "danger");
-      console.log(error.code, error.customData, error.message)
       let err : TipiDiFirebaseError = <any>error.code;
-      switch (err) {
-        case "auth/email-already-in-use":
-          this.messaggiero.presentToast("Mail già registrata", "danger");
-          break;
-        case "auth/invalid-email":
-          this.messaggiero.presentToast("Mail non valida", "danger");
-          break
-        case "auth/weak-password":
-          this.messaggiero.presentToast("Password non valida", "danger");
-          break
-        default:
-          break;
-      }
+      this.handleFirebaseErrors(err);
     })
+  }
+
+  handleFirebaseErrors(err: TipiDiFirebaseError)
+  {
+    console.log(err, "ELIMINAREEEE");
+
+    switch (err) {
+      case "auth/email-already-in-use":
+        this.messaggiero.presentToast("Mail già registrata", "danger");
+        break;
+      case "auth/invalid-email":
+        this.messaggiero.presentToast("Mail non valida", "danger");
+        break
+      case "auth/weak-password":
+        this.messaggiero.presentToast("Password non valida", "danger");
+        break
+      case "auth/user-not-found":
+      case "auth/wrong-password":
+        this.messaggiero.presentToast("Autenticazione fallita", "danger")
+        break
+
+      default:
+        break;
+    }
+  }
+
+  focusInput(ref : IonInput)
+  {
+    ref.setFocus();
+    ref.color = "danger"
+    setTimeout(()=> ref.color = null, 1000)
   }
 
 }
