@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { ListScreenPageRoutingModule } from './list-screen-routing.module';
 
 import { ListScreenPage } from './list-screen.page';
+import { SharedComponentModule } from '../components/sharedComponent.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ListScreenPageRoutingModule
+    ListScreenPageRoutingModule,
+    SharedComponentModule
   ],
   declarations: [ListScreenPage]
 })

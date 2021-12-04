@@ -15,6 +15,10 @@ const routes: Routes = [
     path: 'list-screen',
     loadChildren: () => import('./list-screen/list-screen.module').then( m => m.ListScreenPageModule)
   },
+  {
+    path: 'new-servizio-lock',
+    loadChildren: () => import('./new-servizio-lock/new-servizio-lock.module').then( m => m.NewServizioLockPageModule)
+  },
 ];
 
 @NgModule({

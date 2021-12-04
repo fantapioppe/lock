@@ -5,6 +5,7 @@ import { sendEmailVerification } from '@firebase/auth';
 import { FirebaseError } from '@firebase/util';
 import { IonInput } from '@ionic/angular';
 import { MessaggieroService } from '../service/messaggiero.service';
+import { UserManagerService } from '../service/userManager/user-manager.service';
 import { LoginMode, TipiDiFirebaseError } from '../shared/models';
 import { ROTTE } from '../shared/rotte';
 
@@ -27,7 +28,8 @@ export class HomePage {
   constructor(
     private auth : Auth,
     private route: Router,
-    private messaggiero: MessaggieroService
+    private messaggiero: MessaggieroService,
+    private userManager: UserManagerService
   ) {
   }
 
@@ -71,7 +73,7 @@ export class HomePage {
     .then(res => {
       console.log(res);
       console.log(res.user?.uid);
-
+      this.userManager.user = res.user;
       this.route.navigate([ROTTE.listScreen])
     })
     .catch((error: FirebaseError) => {
