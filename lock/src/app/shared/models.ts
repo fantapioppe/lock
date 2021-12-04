@@ -9,4 +9,8 @@ export class ServizioLock {
   password: string = "";
   note: string = "";
   image: string = "";
+
+  isEmpty(): boolean {
+    return !this.nome && !this.user && !this.password && !this.note
+  }
 }

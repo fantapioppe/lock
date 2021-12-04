@@ -45,7 +45,12 @@ export class ListScreenPage implements OnInit {
   async addServizioLock(){
     let modal = await this.modalController.create({
       component: NewServizioLockPage,
+      cssClass: "myModal",
       swipeToClose: true
+    });
+    modal.onDidDismiss().then(data => {
+      console.log(data.data);
+
     });
     modal.present();
   }

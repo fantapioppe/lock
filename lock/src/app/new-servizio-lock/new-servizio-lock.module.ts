@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { NewServizioLockPageRoutingModule } from './new-servizio-lock-routing.module';
 
 import { NewServizioLockPage } from './new-servizio-lock.page';
+import { SharedComponentModule } from '../components/sharedComponent.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    NewServizioLockPageRoutingModule
+    NewServizioLockPageRoutingModule,
+    SharedComponentModule
   ],
   declarations: [NewServizioLockPage]
 })

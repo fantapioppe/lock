@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IonInput, ModalController } from '@ionic/angular';
+import { MessaggieroService } from '../service/messaggiero.service';
+import { UtilityService } from '../service/utility/utility.service';
+import { ServizioLock } from '../shared/models';
 
 @Component({
   selector: 'app-new-servizio-lock',
@@ -7,9 +11,33 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NewServizioLockPage implements OnInit {
 
-  constructor() { }
+  servizioLock: ServizioLock
+
+  @ViewChild("nome",{static: false}) nome: IonInput;
+
+  constructor(
+    private modalController:ModalController,
+    private messaggiero: MessaggieroService,
+    private utility: UtilityService
+  ) {
+    this.servizioLock = new ServizioLock();
+  }
 
   ngOnInit() {
+  }
+
+  save(){
+    if(!this.servizioLock.nome)
+    {
+      this.utility.focusInput(this.nome);
+      this.messaggiero.presentToast("Inserire nome servizio","danger")
+      return;
+    }
+    this.modalController.dismiss(this.servizioLock)
+  }
+
+  close(){
+    this.modalController.dismiss();
   }
 
 }

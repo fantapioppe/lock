@@ -1,9 +1,28 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>new-servizio-lock</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content style="position: relative;" scrollY="false">
 
-<ion-content>
+  <ion-button class="closeIcon" fill="clear" (click)="close()">
+    <ion-icon name="close"></ion-icon>
+  </ion-button>
+
+  <ion-item style="margin-top: 15%;">
+    <ion-label >Nome</ion-label>
+    <ion-input #nome [(ngModel)]="servizioLock.nome" placeholder="Nome servizio"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label >User</ion-label>
+    <ion-input [(ngModel)]="servizioLock.user" placeholder="user@mail.com"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Password</ion-label>
+    <ion-input type="password" [(ngModel)]="servizioLock.password" placeholder="Password123"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Note</ion-label>
+    <ion-textarea rows="6" [(ngModel)]="servizioLock.note"></ion-textarea>
+  </ion-item>
+
+  <div class="buttonContainer" style="margin-top: 5%;">
+    <ion-button (click)="save()">Salva</ion-button>
+  </div>
 
 </ion-content>

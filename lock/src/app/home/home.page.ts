@@ -6,6 +6,7 @@ import { FirebaseError } from '@firebase/util';
 import { IonInput } from '@ionic/angular';
 import { MessaggieroService } from '../service/messaggiero.service';
 import { UserManagerService } from '../service/userManager/user-manager.service';
+import { UtilityService } from '../service/utility/utility.service';
 import { LoginMode, TipiDiFirebaseError } from '../shared/models';
 import { ROTTE } from '../shared/rotte';
 
@@ -29,7 +30,8 @@ export class HomePage {
     private auth : Auth,
     private route: Router,
     private messaggiero: MessaggieroService,
-    private userManager: UserManagerService
+    private userManager: UserManagerService,
+    private utility: UtilityService
   ) {
   }
 
@@ -43,12 +45,12 @@ export class HomePage {
 
     if(!this.email)
     {
-      this.focusInput(this.inputEmail)
+      this.utility.focusInput(this.inputEmail)
       return;
     }
     else if(!this.psw)
     {
-      this.focusInput(this.inputPsw1)
+      this.utility.focusInput(this.inputPsw1)
       return;
     }
 
@@ -60,7 +62,7 @@ export class HomePage {
     {
       if(!this.pswTwo)
       {
-        this.focusInput(this.inputPsw2)
+        this.utility.focusInput(this.inputPsw2)
         return;
       }
       this.register();
@@ -120,13 +122,6 @@ export class HomePage {
       default:
         break;
     }
-  }
-
-  focusInput(ref : IonInput)
-  {
-    ref.setFocus();
-    ref.color = "danger"
-    setTimeout(()=> ref.color = null, 1000)
   }
 
 }
