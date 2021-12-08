@@ -7,6 +7,8 @@ import { MessaggieroService } from '../service/messaggiero.service';
 import { UserManagerService } from '../service/userManager/user-manager.service';
 import { ServizioLock } from '../shared/models';
 import { ROTTE } from '../shared/rotte';
+import * as CryptoJS from 'crypto-js';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-list-screen',
@@ -38,7 +40,6 @@ export class ListScreenPage implements OnInit {
       this.router.navigate([ROTTE.login]);
       return;
     }
-
     console.log(this.databese);
   }
 
@@ -50,10 +51,32 @@ export class ListScreenPage implements OnInit {
     });
     modal.onDidDismiss().then(data => {
       console.log(data.data);
+      let servizio : ServizioLock = data.data;
+      let path = servizio.nome;
+      let dati = {
+        user:  CryptoJS.AES.encrypt(servizio.user, 'abc').toString(),
+        password: servizio.password,
+        note: servizio.note,
+        image: servizio.image
+      }
+      console.log(dati);
+      console.log(CryptoJS.AES.decrypt(dati.user, 'abc').toString(CryptoJS.enc.Utf8));
 
+
+      this.sendData(path, dati)
     });
     modal.present();
   }
 
+  sendData(path: string, data: any){
+    set(ref(this.databese,this.uid+"/"+path), data)
+  }
+
+  cripta(dato): string{
+    return CryptoJS.AES.encrypt(dato, environment.assicura).toString()
+  }
+  decripta(dato): string{
+    return CryptoJS.AES.decrypt(dato, environment.assicura).toString()
+  }
 
 }
