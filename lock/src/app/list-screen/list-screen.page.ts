@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { set, Database, list, getDatabase, ref } from '@angular/fire/database';
+import { set, Database, ref, onValue } from '@angular/fire/database';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { NewServizioLockPage } from '../new-servizio-lock/new-servizio-lock.page';
 import { MessaggieroService } from '../service/messaggiero.service';
 import { UserManagerService } from '../service/userManager/user-manager.service';
-import { ServizioLock } from '../shared/models';
+import { campiServizio, ServizioLock } from '../shared/models';
 import { ROTTE } from '../shared/rotte';
 import * as CryptoJS from 'crypto-js';
 import { environment } from 'src/environments/environment';
@@ -34,13 +34,26 @@ export class ListScreenPage implements OnInit {
     this.uid = this.userManager.getUid();
     if(!this.uid)
     {
-      console.log(this.uid);
-
       this.messaggiero.presentToast("Errore dati","danger", 3000)
       this.router.navigate([ROTTE.login]);
       return;
     }
-    console.log(this.databese);
+    const dbReference = ref(this.databese,this.uid)
+    onValue(dbReference, (lista) => {
+      console.log("LISTA", lista.val());
+      let objectValue: Record<string,campiServizio> = lista.val();
+      this.listaServiziLock = [];
+      Object.keys(objectValue).forEach( key => {
+        const servizioLock = new ServizioLock();
+        servizioLock.nome = key;
+        servizioLock.user = this.decripta(objectValue[key].user);
+        servizioLock.password = this.decripta(objectValue[key].password);
+        servizioLock.note = this.decripta(objectValue[key].note);
+        servizioLock.image = this.decripta(objectValue[key].image);
+
+        this.listaServiziLock.push(servizioLock);
+      });
+    })
   }
 
   async addServizioLock(){
@@ -54,15 +67,33 @@ export class ListScreenPage implements OnInit {
       let servizio : ServizioLock = data.data;
       let path = servizio.nome;
       let dati = {
-        user:  CryptoJS.AES.encrypt(servizio.user, 'abc').toString(),
-        password: servizio.password,
-        note: servizio.note,
-        image: servizio.image
+        user:  this.cripta(servizio.user),
+        password: this.cripta(servizio.password),
+        note: this.cripta(servizio.note),
+        image: this.cripta(servizio.image)
       }
-      console.log(dati);
-      console.log(CryptoJS.AES.decrypt(dati.user, 'abc').toString(CryptoJS.enc.Utf8));
+      this.sendData(path, dati)
+    });
+    modal.present();
+  }
 
-
+  async modificaServizio(){
+    let modal = await this.modalController.create({
+      component: NewServizioLockPage,
+      componentProps: {modify: true},
+      cssClass: "myModal",
+      swipeToClose: true
+    });
+    modal.onDidDismiss().then(data => {
+      console.log(data.data);
+      let servizio : ServizioLock = data.data;
+      let path = servizio.nome;
+      let dati = {
+        user:  this.cripta(servizio.user),
+        password: this.cripta(servizio.password),
+        note: this.cripta(servizio.note),
+        image: this.cripta(servizio.image)
+      }
       this.sendData(path, dati)
     });
     modal.present();
@@ -71,7 +102,6 @@ export class ListScreenPage implements OnInit {
   sendData(path: string, data: any){
     set(ref(this.databese,this.uid+"/"+path), data)
   }
-
   cripta(dato): string{
     return CryptoJS.AES.encrypt(dato, environment.assicura).toString()
   }

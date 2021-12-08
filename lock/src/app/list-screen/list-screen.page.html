@@ -1,5 +1,10 @@
 <app-header></app-header>
 <ion-content>
+
+  <ion-item *ngFor="let item of listaServiziLock">
+    {{item.nome}}
+  </ion-item>
+
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button (click)="addServizioLock()">
       <ion-icon name="add"></ion-icon>
