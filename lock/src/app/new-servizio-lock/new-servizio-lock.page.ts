@@ -11,7 +11,8 @@ import { ServizioLock } from '../shared/models';
 })
 export class NewServizioLockPage implements OnInit {
 
-  servizioLock: ServizioLock
+  servizioLock: ServizioLock;
+  showPassword: boolean = false;
 
   @Input("modifyMode") modifyMode = false;
   @Input("servizio") servizio:ServizioLock;

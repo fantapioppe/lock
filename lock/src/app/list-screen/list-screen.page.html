@@ -1,8 +1,14 @@
 <app-header></app-header>
-<ion-content>
+<ion-content color="floralwhite" >
 
-  <ion-item *ngFor="let item of listaServiziLock" [button]="true" (click)="modificaServizio(item)">
-    {{item.nome}}
+  <ion-item *ngFor="let item of listaServiziLock"
+  [button]="true"
+  (click)="modificaServizio(item)"
+  class="ion-no-padding"
+  >
+    <ion-label style="margin-left: 10px;">
+      {{item.nome}}
+    </ion-label>
   </ion-item>
 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">

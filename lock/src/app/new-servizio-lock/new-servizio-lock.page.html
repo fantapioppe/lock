@@ -1,4 +1,4 @@
-<ion-content style="position: relative;" scrollY="false">
+<ion-content style="position: relative;">
 
   <ion-button class="closeIcon" fill="clear" (click)="close()">
     <ion-icon name="close"></ion-icon>
@@ -14,7 +14,10 @@
   </ion-item>
   <ion-item>
     <ion-label>Password</ion-label>
-    <ion-input type="password" [(ngModel)]="servizioLock.password" placeholder="Password123"></ion-input>
+    <ion-input [type]="showPassword? null : 'password'" [(ngModel)]="servizioLock.password" placeholder="Password123"></ion-input>
+    <ion-button fill="clear" (click)="showPassword = !showPassword">
+      <ion-icon [name]="!showPassword ? 'eye' : 'eye-off'"></ion-icon>
+    </ion-button>
   </ion-item>
   <ion-item>
     <ion-label>Note</ion-label>
