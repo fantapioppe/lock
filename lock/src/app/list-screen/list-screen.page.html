@@ -1,7 +1,7 @@
 <app-header></app-header>
 <ion-content>
 
-  <ion-item *ngFor="let item of listaServiziLock">
+  <ion-item *ngFor="let item of listaServiziLock" [button]="true" (click)="modificaServizio(item)">
     {{item.nome}}
   </ion-item>
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { set, Database, ref, onValue } from '@angular/fire/database';
+import { set, Database, ref, onValue, remove, update } from '@angular/fire/database';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { NewServizioLockPage } from '../new-servizio-lock/new-servizio-lock.page';
@@ -63,7 +63,10 @@ export class ListScreenPage implements OnInit {
       swipeToClose: true
     });
     modal.onDidDismiss().then(data => {
-      console.log(data.data);
+
+      if(!data.data)
+        return;
+
       let servizio : ServizioLock = data.data;
       let path = servizio.nome;
       let dati = {
@@ -77,24 +80,35 @@ export class ListScreenPage implements OnInit {
     modal.present();
   }
 
-  async modificaServizio(){
+  async modificaServizio(servizio: ServizioLock){
     let modal = await this.modalController.create({
       component: NewServizioLockPage,
-      componentProps: {modify: true},
+      componentProps: {
+        modifyMode: true,
+        servizio: servizio
+      },
       cssClass: "myModal",
       swipeToClose: true
     });
     modal.onDidDismiss().then(data => {
-      console.log(data.data);
-      let servizio : ServizioLock = data.data;
-      let path = servizio.nome;
+      if(!data.data)
+        return;
+
+      let newservizio : ServizioLock = data.data;
+      let path = newservizio.nome;
       let dati = {
-        user:  this.cripta(servizio.user),
-        password: this.cripta(servizio.password),
-        note: this.cripta(servizio.note),
-        image: this.cripta(servizio.image)
+        user:  this.cripta(newservizio.user),
+        password: this.cripta(newservizio.password),
+        note: this.cripta(newservizio.note),
+        image: this.cripta(newservizio.image)
       }
-      this.sendData(path, dati)
+      if(servizio.nome != newservizio.nome)
+      {
+        this.sendData(path,dati)
+        this.removeData(servizio.nome)
+      }
+      else
+        this.updateData(path, dati)
     });
     modal.present();
   }
@@ -102,11 +116,20 @@ export class ListScreenPage implements OnInit {
   sendData(path: string, data: any){
     set(ref(this.databese,this.uid+"/"+path), data)
   }
+  updateData(path: string, data: any){
+    update(ref(this.databese,this.uid+"/"+path), data)
+  }
+  removeData(path: string){
+    if(!path)
+      return;
+
+    remove(ref(this.databese,this.uid+"/"+path))
+  }
   cripta(dato): string{
     return CryptoJS.AES.encrypt(dato, environment.assicura).toString()
   }
   decripta(dato): string{
-    return CryptoJS.AES.decrypt(dato, environment.assicura).toString()
+    return CryptoJS.AES.decrypt(dato, environment.assicura).toString(CryptoJS.enc.Utf8)
   }
 
 }

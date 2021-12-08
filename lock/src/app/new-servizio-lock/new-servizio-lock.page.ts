@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { IonInput, ModalController } from '@ionic/angular';
 import { MessaggieroService } from '../service/messaggiero.service';
 import { UtilityService } from '../service/utility/utility.service';
@@ -13,6 +13,9 @@ export class NewServizioLockPage implements OnInit {
 
   servizioLock: ServizioLock
 
+  @Input("modifyMode") modifyMode = false;
+  @Input("servizio") servizio:ServizioLock;
+
   @ViewChild("nome",{static: false}) nome: IonInput;
 
   constructor(
@@ -24,6 +27,10 @@ export class NewServizioLockPage implements OnInit {
   }
 
   ngOnInit() {
+    console.log("init", this.servizio, this.modifyMode);
+    if(this.servizio){
+      this.servizioLock = this.servizio.clone();
+    }
   }
 
   save(){
